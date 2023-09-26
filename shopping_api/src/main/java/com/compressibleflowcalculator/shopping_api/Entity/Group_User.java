@@ -1,15 +1,16 @@
 package com.compressibleflowcalculator.shopping_api.Entity;
 
-import java.sql.Date;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -18,7 +19,7 @@ import jakarta.persistence.TemporalType;
 @Table(indexes = {
         @Index(name = "users_to_group", columnList = "userid")
 }, name = "Group_Users")
-public class Group_Users {
+public class Group_User {
     public static int admin = 0;
     public static int not_admin = 1;
 
@@ -44,15 +45,31 @@ public class Group_Users {
      * @Column(name = "userid", nullable = false)
      * private User user;
      */
-    @Column(name = "userid", columnDefinition = "VARCHAR(128)", nullable = false)
-    private String userid;
+    @Column(name = "userid", nullable = false)
+    private UUID userid;
 
-    public String getUserId() {
+    public UUID getUserid() {
         return userid;
     }
 
-    @OneToOne()
-    // @Column(name = "groupid", nullable = false)
+    public static Group_User Make_Group_Users(Group group, String userid, int permission) {
+        Group_User newgGroup_Users = new Group_User();
+        // newgGroup_Users.group = group;
+        newgGroup_Users.userid = UUID.fromString(userid);
+        newgGroup_Users.permission = permission;
+        return newgGroup_Users;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupid", nullable = false)
     private Group group;
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    public Group getGroup() {
+        return this.group;
+    }
 
 }

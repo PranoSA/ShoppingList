@@ -1,3 +1,4 @@
+package com.compressibleflowcalculator.shopping_api.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,16 +35,16 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic topic1() {
-        return new NewTopic("signup", 1, (short) 1);
+        return new NewTopic("groups", 1, (short) 1);
     }
 
     @Bean
     public NewTopic topic2() {
-        return new NewTopic("groupadd", null, null);
+        return new NewTopic("groupadd", 1, (short) 1);
     }
 
     @Bean
     public NewTopic topic3() {
-        return new NewTopic("useradd", null, null);
+        return new NewTopic("useradd", 1, (short) 1);
     }
 }

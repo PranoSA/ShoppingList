@@ -6,13 +6,12 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,9 +22,9 @@ public class Group {
     @Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
     private UUID id;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Group_Users", nullable = true)
-    private User[] users;
+    // @JoinColumn(name = "Group_Users", nullable = true)
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Group_User> users;
 
     @Column(name = "time_joined", columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT now()")
     @Temporal(TemporalType.TIMESTAMP)
@@ -35,20 +34,32 @@ public class Group {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     public Group() {
 
     }
 
-    public Group(String name) {
+    public Group(String name, String description) {
         this.name = name;
+        this.description = description;
     }
 
     public UUID getId() {
         return id;
     }
 
+    public List<Group_User> getUsers() {
+        return users;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 }
