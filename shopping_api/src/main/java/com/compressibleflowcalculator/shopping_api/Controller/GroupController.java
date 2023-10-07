@@ -23,15 +23,19 @@ import com.compressibleflowcalculator.shopping_api.Repository.GroupUserRepositor
 import com.compressibleflowcalculator.shopping_api.Repository.InviteRepository;
 import com.compressibleflowcalculator.shopping_api.Service.GroupService;
 import com.compressibleflowcalculator.shopping_api.Service.InviteService;
+import com.compressibleflowcalculator.shopping_api.Views.Group_View;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@CrossOrigin(maxAge = 7200, allowedHeaders = "*", origins = {
-        "http://localhost:3000" }, methods = {
-                RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS, RequestMethod.POST })
+@CrossOrigin(maxAge = 150000, allowedHeaders = "*", origins = { "http://localhost:3000", "https://localhost:5173",
+        "http://localhost:3000/", "http://localhost:5173" }, methods = {
+                RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS,
+                RequestMethod.POST })
+
 public class GroupController {
 
     @Autowired
@@ -48,8 +52,8 @@ public class GroupController {
 
     // @Autowired
     // private GroupService groupService2
-    @CrossOrigin(allowedHeaders = "*", origins = { "http://localhost:3000",
-            "http://localhost:3000/" }, methods = {
+    @CrossOrigin(allowedHeaders = "*", origins = { "http://localhost:3000", "https://localhost:5173",
+            "http://localhost:3000/", "http://localhost:5173" }, methods = {
                     RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS,
                     RequestMethod.POST })
 
@@ -74,7 +78,8 @@ public class GroupController {
     /*
      * Get All Of Your Groups
      */
-    @RequestMapping(value = "/mygroups", method = RequestMethod.GET)
+    @RequestMapping(value = "/groups", method = RequestMethod.GET)
+    @JsonView(Group_View.Group_Response_View.class)
     public List<Group> getMyGroups(@AuthenticationPrincipal Jwt jwt) {
 
         String userid = jwt.getClaim("sub");
@@ -100,8 +105,12 @@ public class GroupController {
      * @return
      */
 
+    @JsonView(Group_View.Group_Response_View.class)
     @RequestMapping(value = "/group", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    public Group AddGroup(@RequestBody GroupRequest group, @AuthenticationPrincipal Jwt jwt) {
+    public Group AddGroup(@JsonView(Group_View.Group_Request_View.class) @RequestBody Group group,
+            @AuthenticationPrincipal Jwt jwt) {
+        System.out.println(group.getDescription());
+        System.out.println("IDK GROUP");
         Group newgroup = new Group(group.getName(), group.getDescription());
         String idk = jwt.getClaim("sub");
         Group newestgroup;
@@ -129,7 +138,7 @@ public class GroupController {
      * }
      */
 
-    @RequestMapping(value = "/group/:groupid/invite", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/invite", method = RequestMethod.POST, produces = "application/json")
     public InviteResponse GenerateInvite(@AuthenticationPrincipal Jwt jwt, @PathVariable String groupid) {
 
         String userid = jwt.getClaim("sub");
@@ -148,7 +157,7 @@ public class GroupController {
      * @param code
      * @return
      */
-    @RequestMapping(value = "/group/:groupid/invite/:inviteid", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/invite/{inviteid}", method = RequestMethod.POST, produces = "application/json")
     public Group_User AcceptInvite(@AuthenticationPrincipal Jwt jwt, @PathVariable String inviteid,
             @RequestParam String code) {
 

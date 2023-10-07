@@ -42,7 +42,7 @@ public class ListController {
     @Autowired
     private ListService listservice;
 
-    @RequestMapping(value = "/group/:groupid/list", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list", method = RequestMethod.POST, produces = "application/json")
     public ShoppingList AddList(@AuthenticationPrincipal Jwt jwt, @PathVariable String groupid,
             @RequestBody ListRequest req) {
 
@@ -57,7 +57,7 @@ public class ListController {
 
     }
 
-    @RequestMapping(value = "/group/:groupid/list", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list", method = RequestMethod.GET, produces = "application/json")
     public List<ShoppingList> GetList(@AuthenticationPrincipal Jwt jwt, @PathVariable String groupid) {
 
         String idk = jwt.getClaim("sub");
@@ -67,7 +67,7 @@ public class ListController {
         return lists;
     }
 
-    @RequestMapping(value = "/group/:groupid/list/:listid/items", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list/{listid}/items", method = RequestMethod.GET, produces = "application/json")
     public List<Item> GetItems(@AuthenticationPrincipal Jwt jwt, @PathVariable String groupid,
             @PathVariable String listid) {
 
@@ -78,7 +78,7 @@ public class ListController {
         return items;
     }
 
-    @RequestMapping(value = "/group/:groupid/list/:listid/item/:itemid", method = RequestMethod.DELETE, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list/{listid}/item/{itemid}", method = RequestMethod.DELETE, produces = "application/json")
     public Item DeleteItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String listid, @PathVariable String itemid) {
 
         UUID userid = UUID.fromString(jwt.getClaim("sub"));
@@ -88,7 +88,7 @@ public class ListController {
         return response;
     }
 
-    @RequestMapping(value = "/group/:groupid/list/:listid/items", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list/{listid}/items", method = RequestMethod.POST, produces = "application/json")
     public Item CreateItem(@AuthenticationPrincipal Jwt jwt, @PathVariable String listid,
             @RequestBody ItemPostRequest body) {
 

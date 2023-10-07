@@ -15,6 +15,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
+import com.compressibleflowcalculator.shopping_api.Views.Groups_User_View;
+import com.fasterxml.jackson.annotation.JsonView;
+
 @Entity
 @Table(indexes = {
         @Index(name = "users_to_group", columnList = "userid")
@@ -26,6 +29,7 @@ public class Group_User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
+    @JsonView(Groups_User_View.Response.class)
     private UUID id;
 
     @Column(name = "permissions", nullable = false)
