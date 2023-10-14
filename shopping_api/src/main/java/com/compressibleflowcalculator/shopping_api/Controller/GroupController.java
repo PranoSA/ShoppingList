@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.compressibleflowcalculator.shopping_api.Controller.Requests.GroupRequest;
 import com.compressibleflowcalculator.shopping_api.Controller.Responses.Group.InviteResponse;
 import com.compressibleflowcalculator.shopping_api.Entity.Group;
 import com.compressibleflowcalculator.shopping_api.Entity.Group_User;
@@ -114,13 +113,20 @@ public class GroupController {
         Group newgroup = new Group(group.getName(), group.getDescription());
         String idk = jwt.getClaim("sub");
         Group newestgroup;
-        try {
-            newestgroup = groupservice.NewGroup(newgroup, idk);
-            return newestgroup;
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-        }
-        return new Group();
+
+        newestgroup = groupservice.NewGroup(newgroup, idk);
+        System.out.println(newestgroup);
+        return newestgroup;
+
+        /*
+         * try {
+         * newestgroup = groupservice.NewGroup(newgroup, idk);
+         * return newestgroup;
+         * } catch (Exception ex) {
+         * System.out.println(ex.getMessage());
+         * }
+         */
+        // return new Group();
 
     }
 

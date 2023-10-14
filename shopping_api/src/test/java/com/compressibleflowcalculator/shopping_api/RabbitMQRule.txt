@@ -1,0 +1,28 @@
+package com.compressibleflowcalculator.shopping_api;
+
+import com.github.fridujo.rabbitmq.mock.MockConnectionFactory;
+import org.junit.rules.ExternalResource;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class RabbitMQRule extends ExternalResource {
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    @Override
+    protected void before() throws Throwable {
+        // Set up RabbitMQ Mock for testing
+        MockConnectionFactory mockConnectionFactory = new MockConnectionFactory();
+        rabbitTemplate.setConnectionFactory(mockConnectionFactory);
+    }
+
+    @Override
+    protected void after() {
+        // Clean up resources after tests
+    }
+}{
+
+}

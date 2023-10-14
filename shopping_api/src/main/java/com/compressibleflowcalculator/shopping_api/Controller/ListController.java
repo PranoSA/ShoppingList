@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.compressibleflowcalculator.shopping_api.Controller.Requests.GroupRequest;
 import com.compressibleflowcalculator.shopping_api.Controller.Requests.ItemPostRequest;
 import com.compressibleflowcalculator.shopping_api.Controller.Requests.ListRequest;
 import com.compressibleflowcalculator.shopping_api.Controller.Responses.Group.InviteResponse;
@@ -29,6 +28,9 @@ import com.compressibleflowcalculator.shopping_api.Repository.InviteRepository;
 import com.compressibleflowcalculator.shopping_api.Service.GroupService;
 import com.compressibleflowcalculator.shopping_api.Service.InviteService;
 import com.compressibleflowcalculator.shopping_api.Service.ListService;
+import com.compressibleflowcalculator.shopping_api.Views.Item_View;
+import com.compressibleflowcalculator.shopping_api.Views.List_View;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,16 +44,16 @@ public class ListController {
     @Autowired
     private ListService listservice;
 
-    @RequestMapping(value = "/group/{groupid}/list", method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value = "/group/{groupid}/list", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     public ShoppingList AddList(@AuthenticationPrincipal Jwt jwt, @PathVariable String groupid,
-            @RequestBody ListRequest req) {
+            @JsonView(List_View.ListPostView.class) @RequestBody ShoppingList req) {
 
         String idk = jwt.getClaim("sub");
 
         listservice.getListsByGroup(UUID.fromString(idk), UUID.fromString(groupid));
 
-        ShoppingList newlist = listservice.newList(UUID.fromString(idk), UUID.fromString(groupid), req.getName(),
-                ZonedDateTime.parse(req.getDate()));
+        ShoppingList newlist = listservice.newList(UUID.fromString(idk), UUID.fromString(groupid), req.getDescription(),
+                req.getDate());
 
         return newlist;
 

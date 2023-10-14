@@ -1,0 +1,23 @@
+
+//import org.junit.rules.ExternalResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class H2DatabaseRule extends ExternalResource {
+
+    @Autowired
+    private YourDatabaseInitializer databaseInitializer;
+
+    @Override
+    protected void before() throws Throwable {
+        // Set up and configure H2 database for testing
+        databaseInitializer.initializeDatabase();
+    }
+
+    @Override
+    protected void after() {
+        // Clean up resources after tests
+        databaseInitializer.cleanupDatabase();
+    }
+}
